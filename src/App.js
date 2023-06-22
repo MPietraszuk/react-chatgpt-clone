@@ -1,5 +1,8 @@
+import { useState, useEffect } from "react";
+
 const App = () => {
-  const [ message, setMessage ] = useState(null)
+  const [ value, setValue ] = useState(null);
+  const [ message, setMessage ] = useState(null);
 
   const getMessages = async () => {
     const options = {
@@ -17,8 +20,11 @@ const App = () => {
       console.log(">>> data " + data);
     } catch(error) {
       console.error(">>>> error " + error);
+      setMessage(data.choices[0].message);
     }
   }
+
+  console.log(value);
 
   return (
     <div className="app">
@@ -50,7 +56,7 @@ const App = () => {
         </ul>
         <div className="bottom-section">
           <div className="input-container">
-            <input />
+            <input value={value} onChange={(e) => setValue(e.target.value)}/>
             <div id="submit" onClick={getMessages}>➢</div>
           </div>
           <p className="info">
