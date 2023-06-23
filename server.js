@@ -4,8 +4,9 @@ const cors = require('cors');
 const app = express();
 app.use(express.json());
 app.use(cors());
+require('dotenv').config();
 
-const API_KEY = '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';
+const API_KEY = process.env.API_KEY;
 
 app.post('/completions', async (req, res) => {
   const options = {
@@ -16,7 +17,7 @@ app.post('/completions', async (req, res) => {
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: "How are you?"}],
+      messages: [{ role: "user", content: req.body.message}],
       max_tokens: 100,
     })
   }
@@ -24,6 +25,7 @@ app.post('/completions', async (req, res) => {
       const response = await fetch('https://api.openai.com/v1/chat/completions', options);
       const data = await response.json();
       res.send(data);
+      console.log(">>>> data " + data);
   } catch (error) {
     console.error('>>> error ' + error);
   }
